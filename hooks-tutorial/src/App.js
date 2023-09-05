@@ -1,10 +1,10 @@
-import Counter from "./Counter.js";
+import Average from "./Average.js";
 
 const App = () => {
 
   return (
     <div>
-      <Counter />
+      <Average />
     </div>
   );
 }
