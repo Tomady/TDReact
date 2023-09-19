@@ -7,6 +7,7 @@ import Articles from "./pages/Articles";
 import Layout from "./Layout"
 import NotFount from "./pages/NotFound"
 import MyPage from "./pages/MyPage"
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
       <Route path="/articles" element={<Articles />}>
         <Route path="/articles/:id" element={<Article />} />
       </Route>
+      <Route path="/login" element={<Login />} />
+      <Route path="/mypage" element={<MyPage />} />
       <Route path="*" element={<NotFount />} />
     </Routes>
   );
