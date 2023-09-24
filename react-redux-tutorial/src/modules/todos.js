@@ -1,3 +1,5 @@
+import { createAction, handleActions } from "redux-actions";
+
 // constants
 const CHANGE_INPUT = "todos/CHANGE_INPUT";
 const INSERT = "todos/INSERT";
@@ -5,31 +7,18 @@ const TOGGLE = "todos/TOGGLE";
 const REMOVE = "todos/REMOVE";
 
 // actions
-const changeInput = (input) => ({
-    type: CHANGE_INPUT,
-    input
-})
+const changeInput = createAction(CHANGE_INPUT, (input) => (input));
 
 let id = 3; // insert가 호출될 때마다 1씩 더해짐.
 
-const insert = (text) => ({
-    type: INSERT,
-    todo: {
-        id: id++,
-        text,
-        done: false
-    }
-})
+const insert = createAction(INSERT, (text) => ({
+    id: id++,
+    text,
+    done: false,
+}))
 
-const toggle = (id) => ({
-    type: TOGGLE,
-    id
-})
-
-const remove = (id) => ({
-    type: REMOVE,
-    id
-})
+const toggle = createAction(TOGGLE, (id) => (id));
+const remove = createAction(REMOVE, (id) => (id));
 
 export {changeInput, insert, toggle, remove};
 
@@ -50,37 +39,24 @@ const initialState = {
     ]
 }
 
-function todos(state = initialState, action) {
-    switch(action.type) {
-        case CHANGE_INPUT:
-            return {
-                ...state,
-                input: action.input
+const todos = handleActions(
+    {
+        [CHANGE_INPUT]: (state, {payload: input}) => ({...state, input}),
+        [INSERT]: (state, {payload: todo}) => ({...state, todos: state.todos.concat(todo)}),
+        [TOGGLE]: (state, {payload: id}) => (
+            {
+                ...state, 
+                todos: state.todos.map(
+                    (todo) => (todo.id === id ? {...todo, done: !todo.done} : todo)
+                )
             }
-
-        case INSERT:
-            return {
-                ...state,
-                todos: state.todos.concat(action.todo)
-            }
-
-        case TOGGLE:
-            return {
-                ...state,
-                todos: state.todos.map((todo) => (
-                    todo.id === action.id ? {...todo, done: !todo.done} : todo
-                ))
-            }
-
-        case REMOVE:
-            return {
-                ...state,
-                todos: state.todos.filter((todo) => (todo.id !== action.id))
-            }
-        
-        default:
-            return state;
-    }
-}
+        ),
+        [REMOVE]: (state, {payload: id}) => ({
+            ...state,
+            todos: state.todos.filter((todo) => (todo.id !== id))
+        })
+    },
+    initialState,
+)
 
 export default todos;
