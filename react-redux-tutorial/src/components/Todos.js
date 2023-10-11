@@ -21,12 +21,12 @@ const Todos = ({
     onToggle,
     onRemove,
 }) => {
-    const onSubmit = (e) => {
+    const onSubmit = e => {
         e.preventDefault();
         onInsert(input);
         onChangeInput("");
     }
-    const onChange = (e) => onChangeInput(e.target.value);
+    const onChange = e => onChangeInput(e.target.value);
 
     return (
         <div>
